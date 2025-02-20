@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Interactive Ayurvedic Garden</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
+    <script>
+        AFRAME.registerComponent('ayush-plant', {
+            schema: {
+                name: { type: 'string' },
+                info: { type: 'string' }
+            },
+            init: function () {
+                this.el.addEventListener('click', () => {
+                    if (!this.isFound) {
+                        this.incrementScore();
+                        this.isFound = true;
+                    }
+                    this.toggleInfo();
+                });
+                this.isFound = false;
+                this.infoVisible = false;
+                this.totalPlants = document.querySelectorAll('[ayush-plant]').length;
+            },
+            toggleInfo: function () {
+                if (this.infoVisible) {
+                    this.hideInfo();
+                } else {
+                    this.showInfo();
+                }
+            },
+            showInfo: function () {
+                // Remove existing info displays if any
+                this.hideInfo();
+
+                const infoContainer = document.createElement('a-entity');
+                infoContainer.setAttribute('class', 'info-display');
+                infoContainer.setAttribute('look-at', '#player');
+
+                // Position the info screen to avoid overlap and display in hover
+                infoContainer.setAttribute('position', '0 1.8 -2'); // Adjust this position as needed
+
+                const panelWidth = 6; // Wider panel for landscape orientation
+                const wrapCount = 40; // Reduced wrap count for better readability
+                const padding = 0.2; // Padding around the text
+
+                // Set a fixed height for the info panel
+                const panelHeight = 5; // You can adjust this value
+
+                // Create the panel
+                const infoPanel = document.createElement('a-plane');
+                infoPanel.setAttribute('width', panelWidth);
+                infoPanel.setAttribute('height', panelHeight);
+                infoPanel.setAttribute('material', 'color: #0080ff; opacity: 0.8');
+                infoPanel.setAttribute('position', '0 0 0'); // Center the panel
+                infoContainer.appendChild(infoPanel);
+
+                // Create the text entities
+                const titleTextEntity = document.createElement('a-text');
+                titleTextEntity.setAttribute('value', this.data.name);
+                titleTextEntity.setAttribute('color', '#fff');
+                titleTextEntity.setAttribute('align', 'center');
+                titleTextEntity.setAttribute('wrap-count', wrapCount);
+                titleTextEntity.setAttribute('width', panelWidth - padding * 2);
+                titleTextEntity.setAttribute('position', '0 2 0.01'); // Adjust Y for vertical positioning
+                titleTextEntity.setAttribute('baseline', 'top');
+                infoContainer.appendChild(titleTextEntity);
+
+                const infoTextEntity = document.createElement('a-text');
+                infoTextEntity.setAttribute('value', this.data.info);
+                infoTextEntity.setAttribute('color', '#fff');
+                infoTextEntity.setAttribute('align', 'left');
+                infoTextEntity.setAttribute('wrap-count', wrapCount);
+                infoTextEntity.setAttribute('width', panelWidth - padding * 2);
+                infoTextEntity.setAttribute('position', `-${(panelWidth - padding * 2) / 2} 1.5 0.01`); // Adjust Y for vertical positioning
+                infoTextEntity.setAttribute('baseline', 'top');
+                infoContainer.appendChild(infoTextEntity);
+
+                this.el.appendChild(infoContainer);
+                this.infoVisible = true;
+            },
+
+            hideInfo: function () {
+                const existingInfo = this.el.querySelector('.info-display');
+                if (existingInfo) {
+                    this.el.removeChild(existingInfo);
+                    this.infoVisible = false;
+                }
+            },
+            incrementScore: function () {
+                const scoreElement = document.getElementById('score');
+                const currentScore = parseInt(scoreElement.getAttribute('value')) || 0;
+                // Using this.totalPlants now
+
+                if (currentScore < this.totalPlants) { 
+                    const newScore = currentScore + 1;
+                    scoreElement.setAttribute('value', newScore);
+                    document.getElementById('scoreboard').innerHTML = 'Score: ' + newScore;
+
+                    updateCoolScoreDisplay(newScore);
+
+                    if (newScore === this.totalPlants) {
+                        this.endGame();
+                    }
+                }
+            },
+            endGame: function () {
+                const endTime = new Date();
+                const startTime = new Date(parseInt(document.getElementById('start-time').getAttribute('value')));
+                const timeTakenInSeconds = Math.floor((endTime - startTime) / 1000);
+
+                const gameOverScreen = document.createElement('a-entity');
+                gameOverScreen.setAttribute('id', 'game-over-screen');
+                gameOverScreen.setAttribute('position', '0 1.6 -2');
+                gameOverScreen.setAttribute('look-at', '#player');
+
+                const background = document.createElement('a-plane');
+                background.setAttribute('width', 3);
+                background.setAttribute('height', 2);
+                background.setAttribute('material', 'color: #0080ff; opacity: 0.8');
+                gameOverScreen.appendChild(background);
+
+                const congratsText = document.createElement('a-text');
+                congratsText.setAttribute('value', 'Congratulations!');
+                congratsText.setAttribute('color', '#ffffff');
+                congratsText.setAttribute('align', 'center');
+                congratsText.setAttribute('width', 2.8);
+                congratsText.setAttribute('wrap-count', 30);
+                congratsText.setAttribute('position', '0 0.5 0.01');
+                gameOverScreen.appendChild(congratsText);
+
+                const timeText = document.createElement('a-text');
+                timeText.setAttribute('value', `You found all the plants in ${timeTakenInSeconds} seconds!`);
+                timeText.setAttribute('color', '#ffffff');
+                timeText.setAttribute('align', 'center');
+                timeText.setAttribute('width', 2.8);
+                timeText.setAttribute('wrap-count', 30);
+                timeText.setAttribute('position', '0 0 0.01');
+                gameOverScreen.appendChild(timeText);
+
+                const restartText = document.createElement('a-text');
+                restartText.setAttribute('value', 'Press "R" to restart');
+                restartText.setAttribute('color', '#ffffff');
+                restartText.setAttribute('align', 'center');
+                restartText.setAttribute('width', 2.8);
+                restartText.setAttribute('wrap-count', 30);
+                restartText.setAttribute('position', '0 -0.5 0.01');
+                gameOverScreen.appendChild(restartText);
+
+                document.querySelector('a-scene').appendChild(gameOverScreen);
+
+                window.addEventListener('keydown', function (event) {
+                    if (event.key === 'r' || event.key === 'R') {
+                        location.reload();
+                    }
+                });
+            }
+        });
+
+        function startGame() {
+            document.getElementById('start-time').setAttribute('value', new Date().getTime());
+            document.getElementById('score').setAttribute('value', 0);
+            document.getElementById('scoreboard').innerHTML = 'Score: 0';
+            updateCoolScoreDisplay(0);
+        }
+
+        function updateCoolScoreDisplay(score) {
+            const coolScoreDisplay = document.getElementById('cool-score-display');
+            coolScoreDisplay.innerHTML = '';
+            for (let i = 0; i < 8; i++) {
+                const leaf = document.createElement('span');
+                leaf.textContent = '🍃';
+                leaf.style.opacity = i < score ? '1' : '0.3';
+                coolScoreDisplay.appendChild(leaf);
+            }
+        }
+
+
+        function toggleVR() {
+            const scene = document.querySelector('a-scene');
+            if (scene.is('vr-mode')) {
+                scene.exitVR();
+            } else {
+                scene.enterVR();
+            }
+        }
+        
+    </script>
+    <style>
+        #scoreboard {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: sans-serif;
+            color: white;
+            z-index: 1;
+            font-size: 16px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        #instructions {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: sans-serif;
+            color: white;
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        #cool-score-display {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            z-index: 1;
+        }
+
+        #vr-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 2;
+            padding: 10px;
+            background-color: #0080ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: sans-serif;
+        }
+
+        @media (max-width: 767px) {
+            #scoreboard,
+            #instructions,
+            #cool-score-display,
+            #vr-button {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body onload="startGame()">
+    <div id="scoreboard">Score: 0</div>
+    <div id="instructions">Use W, A, S, D to move, Click on Plants for Info and score a point</div>
+    <div id="cool-score-display"></div>
+    <button id="vr-button" onclick="toggleVR()">Toggle VR Mode</button>
+    <a-scene environment="preset: forest; groundTexture: none; ground: flat; groundColor: #553c25" cursor="rayOrigin: mouse">
+
+        <a-entity id="start-time" visible="false"></a-entity>
+        <a-entity id="score" value="0" visible="false"></a-entity>
+
+        <a-assets>
+            <!-- Replace the src with the correct paths to your model files -->
+            <a-asset-item id="banana-model" src="banana_plant.glb"></a-asset-item>
+            <a-asset-item id="aloe-vera-model" src="aloe_vera_plant.glb"></a-asset-item>
+            <a-asset-item id="basil-model" src="stylized_basil_pot_plant.glb"></a-asset-item>
+            <a-asset-item id="tulsi-model" src="tulsi.glb"></a-asset-item>
+            <a-asset-item id="aswagandha-model" src="aswagandha.glb"></a-asset-item> 
+            <a-asset-item id="giloy-model" src="giloy.glb"></a-asset-item>
+            <a-asset-item id="neem-model" src="neem_plant.glb"></a-asset-item>
+            <a-asset-item id="turmeric-model" src="Turmeric.glb"></a-asset-item>
+        </a-assets>
+
+        <a-entity id="player" camera look-controls wasd-controls position="0 1.6 0"></a-entity>
+
+        <a-entity id="garden">
+
+            <a-box color="#3c2f2f" width="30" depth="30" height="0.1" position="0 0 -5"></a-box>
+
+            <a-entity position="-5 0 -15">
+                <a-entity gltf-model="#banana-model" scale="1.2 1.2 1.2"
+                          ayush-plant="name: Banana Plant (Musa);
+                          info: Ayurvedic Uses:
+• Promotes Digestive Health
+• Supports Respiratory Function
+• Nourishes Skin and Hair
+• Enhances Blood Health
+• Provides Cooling Properties
+
+Interesting Facts:
+• The banana plant is technically a herb
+• It grows from a bulb-like structure called a corm
+• The entire plant is used in traditional medicine">
+                </a-entity>
+            </a-entity>
+
+            <a-entity position="10 0 -8">
+                <a-entity gltf-model="#aloe-vera-model" scale="1.5 1.5 1.5"
+                          ayush-plant="name: Aloe Vera (Aloe barbadensis);
+                          info: Ayurvedic Uses:
+• Soothes Burns and Wounds
+• Promotes Digestive Health
+• Supports Skin Health
+• Boosts Immunity
+• Has Anti-inflammatory Properties
+
+Interesting Facts: 
+• Used for medicinal purposes for centuries
+• Contains vitamins, minerals, and amino acids
+• Gel can be applied topically or consumed">
+                </a-entity>
+            </a-entity>
+
+            <a-entity position="0 0 5">
+                <a-entity gltf-model="#basil-model" scale="3 3 3"
+                          ayush-plant="name: Basil (Ocimum basilicum);
+                          info: Ayurvedic Uses:
+• Relieves Headaches and Cold
+• Supports Digestive Health
+• Improves Cognitive Function
+• Reduces Stress
+• Has Antioxidant Properties
+
+Interesting Facts:
+• Revered in Hindu culture and considered sacred
+• Used in traditional ceremonies
+• Its aroma is uplifting and refreshing">
+                </a-entity>
+            </a-entity>
+
+            <a-entity position="-12 0 0">
+                <a-entity gltf-model="#tulsi-model" scale="3 2 1"
+                          ayush-plant="name: Tulsi (Ocimum tenuiflorum);
+                          info: Ayurvedic Uses:
+• Treats Respiratory Infections
+• Improves Immunity
+• Has Antibacterial Properties
+• Supports Cardiovascular Health
+• Reduces Stress and Anxiety
+
+Interesting Facts:
+• Sacred plant in Hindu religion
+• Vital ingredient in Ayurveda
+• Can grow in many climates">
+                </a-entity>
+            </a-entity>
+
+            <a-entity position="5 2 10">
+                <a-entity gltf-model="#aswagandha-model" scale="2 2 2" 
+                          ayush-plant="name: Ashwagandha (Withania somnifera); 
+                          info: Ayurvedic Uses:
+• Reduces Stress and Anxiety
+• Improves Sleep Quality
+• Boosts Energy Levels
+• Supports Brain Function
+• Enhances Immune System
+
+Interesting Facts:
+•  Known as Indian Ginseng
+•  Adaptogen that helps body adapt to stress
+•  Roots and leaves are used in Ayurveda">
+                </a-entity>
+            </a-entity>
+
+            <a-entity position="-15 2 10">
+                <a-entity gltf-model="#giloy-model" scale="2 2 2"
+                          ayush-plant="name: Giloy (Tinospora cordifolia);
+                          info: Ayurvedic Uses:
+• Boosts Immunity
+• Supports Liver Health
+• Manages Diabetes
+• Reduces Inflammation
+• Has Antioxidant Properties
+
+Interesting Facts:
+• Known as Amrita (nectar of immortality)
+• A powerful immune-boosting herb
+• Used in various Ayurvedic formulations">
+                </a-entity>
+            </a-entity>
+
+            <a-entity position="10 1 15">
+                <a-entity gltf-model="#neem-model" scale="1 1 1"
+                          ayush-plant="name: Neem (Azadirachta indica);
+                          info: Ayurvedic Uses:
+• Treats Skin Conditions
+• Manages Diabetes
+• Supports Oral Health
+• Has Antibacterial and Antifungal Properties
+• Improves Digestive Health
+
+Interesting Facts:
+•  A versatile tree with medicinal properties
+•  Used in traditional medicine for centuries
+•  Various parts of the tree are used for different purposes">
+                </a-entity>
+            </a-entity>
+
+            <a-entity position="0 1 -15">
+                <a-entity gltf-model="#turmeric-model" scale="1 1 1"
+                          ayush-plant="name: Turmeric (Curcuma longa);
+                          info: Ayurvedic Uses:
+• Reduces Inflammation
+• Supports Brain Health
+• Has Antioxidant Properties
+• Aids Digestion
+• Promotes Skin Health
+
+Interesting Facts:
+•  Used as a spice and a medicine
+•  Contains curcumin, a powerful antioxidant
+•  Essential part of traditional Indian cuisine and medicine">
+                </a-entity>
+            </a-entity>
+
+
+        </a-entity>
+
+        <a-light type="ambient" color="#BBB"></a-light>
+        <a-light type="directional" color="#FFF" intensity="0.6" position="-0.5 1 1"></a-light>
+
+    </a-scene>
+</body>
+
+</html> 

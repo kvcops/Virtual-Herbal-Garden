@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AYUSH Virtual Herbal Garden Tour - {{ theme }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2ecc71;
+            --secondary-color: #27ae60;
+            --accent-color: #f39c12;
+            --text-color: #34495e;
+            --background-color: #ecf0f1;
+            --card-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        #tour-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .plant-card {
+            background-color: var(--card-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .plant-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .plant-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .plant-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .plant-card h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+        
+        .plant-card p {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .plant-card iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .learn-more-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .learn-more-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 2rem;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.5s;
+        }
+        
+        @keyframes modalFadeIn {
+            from {opacity: 0; transform: translateY(-50px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .plant-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AYUSH Virtual Herbal Garden Tour: {{ theme }}</h1>
+        <div id="tour-container">
+            {% for plant in plants %}
+            <div class="plant-card">
+                <h2>{{ plant.name }}</h2>
+                <img src="{{ plant.image_url }}" alt="{{ plant.name }}">
+                <p>{{ plant.description }}</p>
+                <p><strong>Use:</strong> {{ plant.use }}</p>
+                {% if plant.model_url %}
+                <iframe src="{{ plant.model_url }}" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+                {% endif %}
+                <button class="learn-more-btn" onclick="showPlantInfo('{{ plant.name }}')">Learn More</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="plant-info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <div id="plant-info-content"></div>
+        </div>
+    </div>
+
+    <script>
+        function showPlantInfo(plantName) {
+            fetch(`/tour_info/${encodeURIComponent(plantName)}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('plant-info-content').innerHTML = data.plant_info;
+                    document.getElementById('plant-info-modal').style.display = 'block';
+                });
+        }
+
+        // Corrected line:
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('plant-info-modal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('plant-info-modal')) {
+                document.getElementById('plant-info-modal').style.display = 'none';
+            }
+        }
+
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add a subtle parallax effect to the background
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.pageYOffset;
+            document.body.style.backgroundPositionY = -scrollPosition * 0.5 + 'px';
+        });
+
+        // Add a fade-in effect for plant cards
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.plant-card').forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

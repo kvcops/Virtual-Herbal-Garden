@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join AYUSH Virtual Herbal Garden</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .left-panel {
+            flex: 1;
+            background: url('https://source.unsplash.com/random/800x800?herbs,ayurveda') center/cover no-repeat;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(33, 150, 243, 0.8));
+            opacity: 0.7;
+        }
+
+        .left-panel-content {
+            position: relative;
+            z-index: 1;
+            padding: 40px;
+            color: white;
+        }
+
+        .left-panel h1 {
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .left-panel p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 50px 15px 15px;
+            border: none;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.2);
+        }
+
+        .form-group label {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .form-group input:focus + label,
+        .form-group input:not(:placeholder-shown) + label {
+            top: 0;
+            font-size: 12px;
+            color: #4CAF50;
+            background: white;
+            padding: 0 5px;
+            border-radius: 10px;
+            left: 15px;
+        }
+
+        .form-group .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            transition: all 0.3s ease;
+            font-size: 20px;
+        }
+
+        .form-group input:focus ~ .input-icon {
+            color: #4CAF50;
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        button {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s;
+        }
+
+        button:active::after {
+            transform: translate(-50%, -50%) scale(2);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #45a049;
+            text-decoration: underline;
+        }
+
+        .floating-leaves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%234CAF50" d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/></svg>');
+            background-size: contain;
+            opacity: 0.5;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .error-msg {
+            background: rgba(255, 87, 34, 0.1);
+            color: #d32f2f;
+            padding: 12px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background: linear-gradient(to right, #4CAF50, #2196F3);
+            transition: width 0.3s ease;
+        }
+        
+        .password-strength {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #888;
+            transition: all 0.3s ease;
+        }
+        
+        .password-strength.weak { color: #d32f2f; }
+        .password-strength.medium { color: #FFA000; }
+        .password-strength.strong { color: #4CAF50; }
+        
+        .particle {
+            position: absolute;
+            background: rgba(76, 175, 80, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @media (max-width: 767px) {
+            .container {
+                flex-direction: column;
+                border-radius: 0;
+            }
+
+            .left-panel {
+                height: 300px;
+                border-radius: 0 0 20px 20px;
+            }
+
+            .left-panel-content {
+                padding: 30px;
+            }
+
+            .left-panel h1 {
+                font-size: 2.2em;
+            }
+
+            .left-panel p {
+                font-size: 1em;
+            }
+
+            .right-panel {
+                padding: 40px;
+            }
+
+            .form-group input {
+                padding: 12px 40px 12px 12px;
+                font-size: 14px;
+            }
+
+            .form-group label {
+                font-size: 14px;
+            }
+
+            .form-group .input-icon {
+                font-size: 18px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 12px;
+            }
+
+            .login-link {
+                font-size: 13px;
+            }
+
+            .particle {
+                display: none;
+            }
+        }
+    </style>
+        </head>
+        <body>
+        <div class="container">
+            <div class="left-panel">
+                <div class="left-panel-content">
+                    <h1>AYUSH Virtual Herbal Garden</h1>
+                    <p>Embark on a journey through nature's healing wonders. Join our community and discover the ancient wisdom of Ayurvedic herbs.</p>
+                </div>
+                <div class="floating-leaves"></div>
+            </div>
+            <div class="right-panel">
+                <form method="POST" id="registerForm">
+                    {% if error %}
+                        <div class="error-msg">{{ error }}</div>
+                    {% endif %}
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder=" " required>
+                        <label for="name">Your Name</label>
+                        <span class="input-icon">👤</span>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder=" " required>
+                        <label for="email">Email Address</label>
+                        <span class="input-icon">✉️</span>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="password" name="password" placeholder=" " required>
+                        <label for="password">Create Password</label>
+                        <span class="input-icon">🔒</span>
+                        <div class="password-strength"></div>
+                    </div>
+                    <button type="submit">Join the Garden</button>
+                </form>
+                <div class="login-link">
+                    Already a member? <a href="{{ url_for('login') }}">Log in</a>
+                </div>
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+        
+        <script>
+            // Create floating leaves
+            const leavesContainer = document.querySelector('.floating-leaves');
+            const leafCount = 20;
+        
+            for (let i = 0; i < leafCount; i++) {
+                const leaf = document.createElement('div');
+                leaf.classList.add('leaf');
+                leaf.style.left = `${Math.random() * 100}%`;
+                leaf.style.top = `${Math.random() * 100}%`;
+                leaf.style.animationDuration = `${Math.random() * 10 + 5}s`;
+                leaf.style.animationDelay = `${Math.random() * 5}s`;
+                leavesContainer.appendChild(leaf);
+            }
+        
+            // GSAP animations
+            gsap.registerPlugin(ScrollTrigger);
+        
+            gsap.from('.left-panel', { duration: 1.2, x: '-100%', ease: 'power3.out' });
+            gsap.from('.right-panel', { duration: 1.2, x: '100%', ease: 'power3.out', delay: 0.3 });
+            gsap.from('.left-panel-content', { duration: 1, opacity: 0, y: 50, ease: 'power3.out', delay: 0.5 });
+            gsap.from('.form-group', { 
+                duration: 0.8, 
+                opacity: 0, 
+                y: 20, 
+                stagger: 0.2, 
+                ease: 'power3.out', 
+                delay: 0.8 
+            });
+            gsap.from('button', { duration: 0.8, opacity: 0, y: 20, ease: 'power3.out', delay: 1.4 });
+            gsap.from('.login-link', { duration: 0.8, opacity: 0, y: 20, ease: 'power3.out', delay: 1.6 });
+        
+            // Leaf animation
+            gsap.to('.leaf', {
+                duration: 'random(5, 10)',
+                x: 'random(-100, 100)',
+                y: 'random(-100, 100)',
+                rotation: 'random(-360, 360)',
+                repeat: -1,
+                yoyo: true,
+                ease: 'power1.inOut',
+                stagger: {
+                    amount: 5,
+                    from: 'random'
+                }
+            });
+        
+            // Form interaction
+            const form = document.getElementById('registerForm');
+            const progressBar = document.querySelector('.progress-bar');
+            const inputs = form.querySelectorAll('input');
+            const passwordInput = document.getElementById('password');
+            const passwordStrength = document.querySelector('.password-strength');
+        
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    gsap.to(input, { scale: 1.05, duration: 0.3, ease: 'power2.out' });
+                });
+        
+                input.addEventListener('blur', () => {
+                    gsap.to(input, { scale: 1, duration: 0.3, ease: 'power2.out' });
+                });
+        
+                input.addEventListener('input', updateProgress);
+            });
+        
+            function updateProgress() {
+                const filledInputs = Array.from(inputs).filter(input => input.value.trim() !== '').length;
+                const progress = (filledInputs / inputs.length) * 100;
+                gsap.to(progressBar, { width: `${progress}%`, duration: 0.5, ease: 'power2.out' });
+            }
+        
+            // Password strength checker
+            passwordInput.addEventListener('input', checkPasswordStrength);
+        
+            function checkPasswordStrength() {
+                const password = passwordInput.value;
+                let strength = 0;
+                if (password.match(/[a-z]+/)) strength += 1;
+                if (password.match(/[A-Z]+/)) strength += 1;
+                if (password.match(/[0-9]+/)) strength += 1;
+                if (password.match(/[$@#&!]+/)) strength += 1;
+            
+                passwordStrength.classList.remove('weak', 'medium', 'strong');
+                
+                if (password.length < 6) {
+                    passwordStrength.textContent = 'Too short';
+                    passwordStrength.classList.add('weak');
+                } else if (strength < 3) {
+                    passwordStrength.textContent = 'Weak';
+                    passwordStrength.classList.add('weak');
+                } else if (strength === 3) {
+                    passwordStrength.textContent = 'Medium';
+                    passwordStrength.classList.add('medium');
+                } else {
+                    passwordStrength.textContent = 'Strong';
+                    passwordStrength.classList.add('strong');
+                }
+            }
+            
+            // Button hover effect
+            const button = document.querySelector('button');
+            button.addEventListener('mouseenter', () => {
+                gsap.to(button, { scale: 1.05, duration: 0.3, ease: 'power2.out' });
+            });
+            
+            button.addEventListener('mouseleave', () => {
+                gsap.to(button, { scale: 1, duration: 0.3, ease: 'power2.out' });
+            });
+            
+            // Form submission animation
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                gsap.to(form, { opacity: 0, y: -50, duration: 0.5, ease: 'power2.in' });
+                gsap.to('.login-link', { opacity: 0, y: -50, duration: 0.5, ease: 'power2.in', delay: 0.1 });
+                setTimeout(() => {
+                    form.submit();
+                }, 600);
+            });
+            
+            // Input field animations
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    gsap.to(input.nextElementSibling, { y: -25, scale: 0.8, duration: 0.3, ease: 'power2.out' });
+                    gsap.to(input.nextElementSibling.nextElementSibling, { scale: 1.2, duration: 0.3, ease: 'power2.out' });
+                });
+            
+                input.addEventListener('blur', () => {
+                    if (input.value === '') {
+                        gsap.to(input.nextElementSibling, { y: 0, scale: 1, duration: 0.3, ease: 'power2.out' });
+                    }
+                    gsap.to(input.nextElementSibling.nextElementSibling, { scale: 1, duration: 0.3, ease: 'power2.out' });
+                });
+            });
+            
+            // Particle animation
+            const particleCount = 50;
+            const particles = [];
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                document.body.appendChild(particle);
+                particles.push(particle);
+            
+                gsap.set(particle, {
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    scale: Math.random() * 0.5 + 0.5
+                });
+            
+                animateParticle(particle);
+            }
+            
+            function animateParticle(particle) {
+                gsap.to(particle, {
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    duration: Math.random() * 10 + 5,
+                    ease: 'power1.inOut',
+                    onComplete: () => animateParticle(particle)
+                });
+            }
+            
+            // Floating animation for left panel content
+            gsap.to('.left-panel-content', {
+                y: 20,
+                duration: 2,
+                repeat: -1,
+                yoyo: true,
+                ease: 'power1.inOut'
+            });
+            
+</script>
+</body>
+</html>

@@ -1,0 +1,2483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AYUSH Virtual Herbal Garden</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #45a049;
+            --accent-color: #FFC107;
+            --text-color: #333;
+            --background-color: #f9f9f9;
+            --card-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-image: url('/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+        }
+
+        .overlay {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.1) 100%);
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: white;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            padding: 10px 15px;
+            border-radius: 25px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+        .nav-links a:hover {
+            color: var(--accent-color);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .floating-leaves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%234CAF50" d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/></svg>');
+            background-size: contain;
+            opacity: 0.7;
+            animation: floatLeaf 15s infinite linear;
+        }
+
+        @keyframes floatLeaf {
+            0% {
+                transform: translateY(-100%) rotate(0deg);
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .hero h1 {
+            color: #FFF8DC;
+        }
+
+        .hero p {
+            color: #FFFAF0;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: right;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        main {
+            padding: 4rem 0;
+            position: relative;
+            min-height: calc(100vh - 160px);
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 50px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .search-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 20px 25px;
+            font-size: 1.1rem;
+            border: none;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            background-color: #f0f0f0;
+        }
+
+        .search-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 20px 35px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .search-button i {
+            margin-left: 10px;
+        }
+
+        .loading {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+            border-top-color: transparent;
+            animation: spin 1s infinite linear;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .plant-info {
+            background-color: var(--card-color);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-top: 3rem;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .plant-info.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .plant-info h2 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .plant-info h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+
+        details {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1.5rem;
+        }
+
+        summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        summary:hover {
+            color: var(--secondary-color);
+        }
+
+        summary::marker {
+            color: var(--accent-color);
+        }
+
+        .model-embed {
+            margin-top: 3rem;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .model-embed.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .feature-card {
+            background-color: var(--card-color);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover h3 {
+            color: var(--primary-color);
+        }
+
+
+        .virtual-tour {
+            margin-top: 4rem;
+            background-color: var(--card-color);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .tour-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tour-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .tour-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .tour-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .tour-plant {
+            background-color: var(--background-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+
+
+        /* Advanced Search */
+
+        .advanced-search {
+            margin-top: 4rem;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background-color: var(--card-color);
+            position: relative; /* For background plants */
+        }
+
+
+        #advanced-search h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center; /* Center the heading */
+        }
+
+        .filter-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Increased min width for better layout */
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+
+        .filter-form select,
+        .filter-form input {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: white;
+            color: #333; /* Text color */
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+        }
+
+        .filter-form select:focus,
+        .filter-form input:focus {
+            outline: none; /* Remove default focus outline */
+            border-color: var(--primary-color);
+        }
+
+        .filter-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+            font-weight: 600; /* Slightly bolder button text */
+            justify-self: center; /* Center the button horizontally */
+        }
+
+        .filter-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .filter-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .filter-results .plant-card {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: left; /* Align text left */
+            position: relative; /* Position for image overlays */
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .filter-results .plant-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .filter-results .plant-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .filter-results .plant-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .filter-results .plant-card:hover::before {
+            opacity: 0.7;
+        }
+
+
+
+        /* Styles for background plants */
+        .plant {
+            position: absolute;
+            z-index: -1; /* Behind the content */
+            opacity: 0.6; /* Adjust opacity as needed */
+        }
+
+
+        .plant-1 {
+            width: 150px;
+            height: 200px;
+            top: 100px;
+            left: 20px;
+            border-radius: 50% 50% 0 0;
+            background-image: url('https://images.unsplash.com/photo-1528308553993-a278c0b5a715?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80');
+            background-size: cover;
+        }
+
+        .plant-2 {
+            width: 80px;
+            height: 100px;
+            top: 300px;
+            left: 500px;
+            border-radius: 50% 50% 0 0;
+            background-image: url('https://images.unsplash.com/photo-1578110910413-12816d6c529f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80');
+            background-size: cover;
+        }
+
+        .plant-3 {
+            width: 120px;
+            height: 150px;
+            top: 250px;
+            left: 800px;
+            border-radius: 50% 50% 0 0;
+            background-image: url('https://images.unsplash.com/photo-1532104814736-37e54f071a2a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80');
+            background-size: cover;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 0 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .footer-section {
+            flex: 1;
+            margin-right: 30px;
+            margin-bottom: 20px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+        }
+
+        .footer-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+            }
+
+            .footer-section {
+                margin-right: 0;
+            }
+        }
+        .virtual-garden-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            border: none; /* Remove any default border */
+            margin: 0 10px; /* Add some spacing around the button */
+        }
+
+        .virtual-garden-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .virtual-garden-button i {
+            margin-left: 5px;
+        }
+
+        .tour-selector a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            border: none;
+            margin: 0 10px;
+        }
+
+        .tour-selector a:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .tour-selector a i {
+            margin-left: 5px;
+        }
+
+        .share-buttons {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .share-button {
+            display: inline-block;
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .share-button:hover {
+            background-color: #45a049;
+        }
+
+        #bookmark-note-area {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #bookmark-note-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        #save-bookmark-note {
+            margin-top: 10px;
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        #save-bookmark-note:hover {
+            background-color: #45a049;
+        }
+
+        /*advanced search animations*/
+        .filter-loading-bar {
+            width: 100%;
+            height: 4px;
+            background-color: #f3f3f3;
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+
+        .filter-loading-bar::before {
+            content: '';
+            position: absolute;
+            left: -50%;
+            height: 100%;
+            width: 50%;
+            background-color: var(--primary-color);
+            animation: loading 1s linear infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                left: -50%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        .filter-loading {
+            width: 100%;
+            height: 4px;
+            background-color: #f3f3f3;
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+
+        .filter-loading::before {
+            content: '';
+            position: absolute;
+            left: -50%;
+            height: 100%;
+            width: 50%;
+            background-color: var(--primary-color);
+            animation: loading 1s linear infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -50%; }
+            100% { left: 100%; }
+        }
+
+        .filter-loading.active {
+            display: block;
+        }
+
+        .remove-bookmark {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .remove-bookmark:hover {
+            background-color: #cc0000;
+        }
+
+        /* Loading Bar Styles */
+        .bookmark-loading, .remove-bookmark-loading {
+            width: 100%;
+            height: 4px;
+            background-color: #f3f3f3;
+            position: relative;
+            overflow: hidden;
+            display: none;
+            margin-top: 5px;
+        }
+
+        .bookmark-loading::before, .remove-bookmark-loading::before {
+            content: '';
+            position: absolute;
+            left: -50%;
+            height: 100%;
+            width: 50%;
+            background-color: var(--primary-color);
+            animation: loading 1s linear infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -50%; }
+            100% { left: 100%; }
+        }
+
+        .bookmark-loading.active, .remove-bookmark-loading.active {
+            display: block;
+        }
+
+        #bookmarks-container {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #bookmarks-container h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        #bookmarks-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #bookmarks-container li {
+            background-color: white;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        #bookmarks-container li h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        #bookmarks-container li a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Ensure the advanced search inputs are visible */
+        .filter-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-form select,
+        .filter-form input,
+        .filter-form button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        #bookmark-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+            margin-top: 20px;
+            display: none;
+        }
+
+        #bookmark-button:hover {
+            background-color: #e0a800;
+        }
+
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 0 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .footer-section {
+            flex: 1;
+            margin-right: 30px;
+            margin-bottom: 20px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+        }
+
+        .footer-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+            }
+
+            .footer-section {
+                margin-right: 0;
+            }
+        }
+        .virtual-garden-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            border: none; /* Remove any default border */
+            margin: 0 10px; /* Add some spacing around the button */
+        }
+
+        .virtual-garden-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .virtual-garden-button i {
+            margin-left: 5px;
+        }
+
+        .tour-selector a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            border: none;
+            margin: 0 10px;
+        }
+
+        .tour-selector a:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .tour-selector a i {
+            margin-left: 5px;
+        }
+
+        .share-buttons {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .share-button {
+            display: inline-block;
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .share-button:hover {
+            background-color: #45a049;
+        }
+        
+        #bookmark-note-area {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        #bookmark-note-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        
+        #save-bookmark-note {
+            margin-top: 10px;
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        #save-bookmark-note:hover {
+            background-color: #45a049;
+        }
+
+  
+        /* Plant of the Day Styling */
+        #plant-of-the-day {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+            border: 2px solid #4CAF50;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Lato', sans-serif;
+        }
+
+        #plant-of-the-day::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M30 50 Q 50 30, 70 50 T 110 50" fill="none" stroke="%234CAF50" stroke-width="2"/></svg>') repeat;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        #plant-of-the-day h2 {
+            color: #2E7D32;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            font-family: 'Playfair Display', serif;
+        }
+
+        #plant-of-the-day-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #plant-of-the-day-content h3 {
+            color: #2E7D32;
+            font-size: 2.5rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+        }
+
+
+        #plant-of-the-day-content img {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        #load-plant-of-the-day {
+
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+             display: block;
+        }
+
+        #load-plant-of-the-day:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        #scientific-name {
+            font-size: 1.8rem;
+            color: #6B5B95;
+            border-left: 5px solid #FF6F61;
+            padding-left: 15px;
+        }
+
+
+        #brief-description {
+            font-size: 1.8rem;
+            color: #88B04B;
+            border-left: 5px solid #88B04B;
+            padding-left: 15px;
+        }
+
+        #medicinal-uses {
+            font-size: 1.8rem;
+            color: #F7CAC9;
+            border-left: 5px solid #F7CAC9;
+            padding-left: 15px;
+        }
+
+        #interesting-fact {
+            font-size: 1.8rem;
+            color: #92A8D1;
+            border-left: 5px solid #92A8D1;
+            padding-left: 15px;
+        }
+
+
+
+        /* Quiz Styling */
+        #quiz-container {
+            background-color: var(--card-color);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        #quiz-container h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        #quiz-question {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        #quiz-options {
+            margin-bottom: 1rem;
+        }
+
+        #quiz-options label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        #quiz-options input[type="radio"] {
+            margin-right: 5px;
+        }
+
+
+        #quiz-result {
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+
+
+        #quiz-result p {
+            margin-bottom: 0;
+        }
+
+        #quiz-result p[style*="color: green"] {
+            background-color: #e9ffe9;
+            color: green;
+        }
+
+        #quiz-result p[style*="color: red"] {
+            background-color: #ffe9e9;
+            color: red;
+        }
+
+
+        .quiz-submit {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .quiz-submit:hover {
+            background-color: var(--secondary-color);
+        }
+
+
+        /* Loading Scrollbar Styles (For Plant of the Day and Plant Quiz) */
+        .potd-loading, .quiz-loading {
+            width: 100%;
+            height: 4px;
+            background-color: #f3f3f3;
+            position: relative;
+            overflow: hidden;
+            display: none;
+            margin-top: 5px;
+        }
+
+        .potd-loading::before, .quiz-loading::before {
+            content: '';
+            position: absolute;
+            left: -50%;
+            height: 100%;
+            width: 50%;
+            background-color: var(--primary-color);
+            animation: loading 1s linear infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -50%; }
+            100% { left: 100%; }
+        }
+
+        .potd-loading.active, .quiz-loading.active {
+            display: block;
+        }
+
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            color: #333;
+            z-index: 1000;
+        }
+
+        .custom-alert-error {
+            border-left: 5px solid #d9534f; /* Red for error */
+        }
+
+
+        .custom-alert-success {
+            border-left: 5px solid #4cae4c; /* Green for success */
+        }
+
+        /* Styles for the Plant of the Day and Plant Quiz buttons */
+        #load-plant-quiz { /* Select both buttons if they exist */
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem; /* Adjust the font size as needed */
+            font-weight: 600; /* Make the text slightly bold */
+            transition: background-color 0.3s ease; /* Smooth transition on hover */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+        }
+
+
+        #load-plant-quiz:hover {
+            background-color: var(--secondary-color); /* Change background on hover */
+        }
+
+
+        #load-plant-quiz i {
+            margin-left: 5px;
+        }
+
+        /* ... (Existing CSS) ... */
+
+        /* Quiz Option Styles */
+        .quiz-option {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .quiz-option input[type="radio"] {
+            margin-right: 10px;
+            /* Adjust color here to be like the example you provided. It's hard to tell exactly, so I've left it generic for now */
+            accent-color: #2ecc71;
+            margin-top: 3px;
+        }
+
+        .quiz-option label {
+            font-size: 1.1rem;
+            font-family: sans-serif;
+        }
+
+        #quiz-form button[type="submit"] {
+            /* Restyle submit button as you need. You might want to replicate styling with a button style like you've used elsewhere */
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Optional Style for the Question Container */
+        #quiz-container {
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            background-color: #fff;
+            margin-bottom: 20px;
+        }
+
+
+        #quiz-question {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        /* ... (Existing CSS) ... */
+
+        /* Mobile Responsive Styles */
+
+      /* Mobile Responsive Styles */
+@media (min-width: 768px) {
+    .menu-button {
+        display: none;
+    }
+
+    .nav-links {
+        display: flex !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .container {
+        padding: 0 8px;
+        max-width: 600px; /* Adjust the size as needed */
+        margin: 0 auto;   /* Centers the container */
+    }
+
+    header {
+        position: relative;
+        padding-top: 60px; /* Increase top padding to accommodate the menu button */
+    }
+
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background-color: var(--primary-color);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 100;
+        justify-content: center;
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .nav-links a {
+        background-color: transparent;
+        backdrop-filter: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        color: white;
+    }
+
+    .nav-links a:hover {
+        background-color: var(--secondary-color);
+    }
+
+    .menu-button-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 60px;
+        width: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .menu-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        z-index: 102; /* Ensure the button is above the nav menu */
+    }
+
+    .menu-button i {
+        pointer-events: none;
+    }
+
+
+    .hero {
+        flex-direction: column-reverse;
+        padding: 2rem 0;
+    }
+
+    .hero-content {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .hero-image {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .hero-image img {
+        max-width: 50%;
+    }
+
+    .search-container {
+        max-width: 100%;
+    }
+
+    .search-input,
+    .search-button {
+        font-size: 1rem;
+        padding: 15px;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    .virtual-tour,
+    .advanced-search {
+        padding: 1.5rem;
+    }
+
+    .tour-selector {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .tour-selector a {
+        margin: 0.5rem;
+    }
+
+    .filter-form {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-results {
+        grid-template-columns: 1fr;
+    }
+
+    .plant-1,
+    .plant-2,
+    .plant-3 {
+        display: none;
+    }
+
+    .footer-content {
+        flex-direction: column;
+    }
+
+    .footer-section {
+        margin-right: 0;
+    }
+    .fa-times {
+        font-size: 1.8rem;
+    }
+    header {
+        padding-top: 60px; /* Maintain existing padding */
+        max-width: 600px;   /* Set a maximum width */
+        margin: 0 auto;   
+        max-height:500px;  /* Center the header */
+    }
+}
+
+
+
+/* Add this new style for better visibility of the close icon */
+.menu-button .fa-times {
+    font-size: 1.8rem;
+}
+
+
+/*story feature css*/
+#story-container {
+    background-color: var(--card-color);
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+}
+
+#story-container h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+#story-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    text-align: justify;
+    color: #333;
+}
+
+.highlight-plant {
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.story-paragraph {
+    margin-bottom: 1.5rem;
+}
+
+#generate-story-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#generate-story-button:hover {
+    background-color: var(--secondary-color);
+}
+
+.story-loading {
+    width: 100%;
+    height: 4px;
+    background-color: #f3f3f3;
+    position: relative;
+    overflow: hidden;
+    display: none;
+    margin-top: 5px;
+}
+
+.story-loading::before {
+    content: '';
+    position: absolute;
+    left: -50%;
+    height: 100%;
+    width: 50%;
+    background-color: var(--primary-color);
+    animation: loading 1s linear infinite;
+}
+#story-heading { 
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+@keyframes loading {
+    0% { left: -50%; }
+    100% { left: 100%; }
+}
+
+.story-loading.active {
+    display: block;
+}
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="floating-leaves">
+            <div class="leaf" style="left: 10%; animation-delay: -2s;"></div>
+            <div class="leaf" style="left: 30%; animation-delay: -4s;"></div>
+            <div class="leaf" style="left: 50%; animation-delay: -6s;"></div>
+            <div class="leaf" style="left: 70%; animation-delay: -8s;"></div>
+            <div class="leaf" style="left: 90%; animation-delay: -10s;"></div>
+        </div>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">AYUSH Virtual Herbal Garden</a>
+                <div class="nav-links">
+                    <a href="#home">Home</a>
+                    <a href="#virtual-tour">Virtual Tour</a>
+                    <a href="#advanced-search">Advanced Search</a>
+                    <a href="#bookmarks-container">Bookmarks</a>
+                    {% if 'user_display_name' in session %}
+                        <a href="#plant-of-the-day">Quiz</a>
+                        <a href="#story-container">Story</a>
+                        <a href="#" id="username-link">{{ session['user_display_name'] }}</a>
+                        
+                        <a href="{{ url_for('logout') }}">Logout</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">Login</a>
+                        <a href="{{ url_for('signup') }}">Signup</a>
+                    {% endif %}
+                </div>
+                <div class="menu-button-container">
+                    <button class="menu-button" aria-label="Toggle menu">
+                        <i class="fas fa-bars" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </nav>
+  
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Discover AYUSH Medicinal Plants</h1>
+                    <p>Explore our virtual herbal garden and uncover the healing power of plants used in Ayurveda, Yoga & Naturopathy, Unani, Siddha, and Homeopathy.</p>
+                    <div class="search-container">
+                        <input type="text" id="plant_name" class="search-input" placeholder="Enter herb name" required>
+                        <button id="search-button" class="search-button">Discover <i class="fas fa-leaf"></i></button>
+                        <button type="button" id="voiceSearchBtn" class="voice-search-button">
+                            <i class="fas fa-microphone"></i> Voice Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="loading">
+            <div class="loading-spinner"></div>
+        </div>
+
+        <div id="plant-details" class="plant-info"></div>
+        <div id="model-embed" class="model-embed"></div>
+
+        <!-- Share buttons -->
+        <div class="share-buttons" id="share-buttons-container" style="display:none;">
+            <a href="#" class="share-button" onclick="shareOnFacebook()" target="_blank"><i class="fab fa-facebook-f"></i> Share</a>
+            <a href="#" class="share-button" onclick="shareOnTwitter()" target="_blank"><i class="fab fa-twitter"></i> Tweet</a>
+            <a href="#" class="share-button" onclick="shareOnWhatsApp()" target="_blank"><i class="fab fa-whatsapp"></i> Share</a>
+        </div>
+
+        <div id="bookmark-note-area" style="display:none;">
+            <textarea id="bookmark-note-input" rows="4" cols="50" placeholder="Add notes for this bookmark"></textarea>
+            <button id="save-bookmark-note" type="button">Save</button>
+        </div>
+
+        <button id="bookmark-button" style="display: none;">Bookmark Plant</button>
+
+        <!-- Bookmarks section with Notes input -->
+        <div id="bookmarks-container">
+            <h2>My Bookmarks</h2>
+            <ul></ul>
+        </div>
+
+        <div id="plant-of-the-day" class="plant-of-the-day">
+            <h2>Plant of the Day</h2>
+            <button id="load-plant-of-the-day" class="feature-button">Load Plant of the Day</button>
+            <div id="plant-of-the-day-content"></div>
+        </div>
+
+        <div id="quiz-container">
+            <h2>Quiz Question</h2>
+            <p id="quiz-question"></p>
+            <form id="quiz-form">
+                <div id="quiz-options"></div>
+                <button type="submit">Submit Answer</button>
+            </form>
+            <div id="quiz-result" style="display: none;"></div>
+        </div>
+
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-seedling"></i></div>
+                <h3>Extensive AYUSH Herb Database</h3>
+                <p>Access information on thousands of medicinal plants used in AYUSH systems.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-mortar-pestle"></i></div>
+                <h3>Traditional Uses</h3>
+                <p>Learn about the historical and cultural significance of each herb in AYUSH practices.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-flask"></i></div>
+                <h3>Scientific Research</h3>
+                <p>Stay updated with the latest scientific findings on herbal remedies in AYUSH systems.</p>
+            </div>
+        </div>
+
+        <div><h3></h3></div>
+
+        <div id="story-container">
+            <h2>Herbal Story</h2>
+            <h2 id="story-heading"></h2> 
+            <div id="story-text"></div>
+            <button id="generate-story-button">Generate Story</button>
+            <div class="story-loading"></div> 
+        </div>
+    
+
+        <!-- Virtual Tour section with updated buttons -->
+        <div id="virtual-tour" class="virtual-tour">
+            <h2>Virtual Tours</h2>
+            <div class="tour-selector">
+                <a href="/static/virtual_garden.html" class="virtual-garden-button">Virtual Garden <i class="fas fa-seedling"></i></a>
+            </div>
+        </div>
+
+
+        <div id="plant-info-modal" class="modal">
+            <div class="modal-content">
+                <span class="close"></span>
+                <div id="plant-info-content"></div>
+            </div>
+        </div>
+
+        <div id="advanced-search" class="advanced-search">
+            <h2>Advanced Search</h2>
+            <form class="filter-form">
+                <select id="ayush-system">
+                    <option value="">Select AYUSH System</option>
+                    <option value="ayurveda">Ayurveda</option>
+                    <option value="yoga">Yoga & Naturopathy</option>
+                    <option value="unani">Unani</option>
+                    <option value="siddha">Siddha</option>
+                    <option value="homeopathy">Homeopathy</option>
+                </select>
+                <select id="plant-part">
+                    <option value="">Select Plant Part</option>
+                    <option value="root">Root</option>
+                    <option value="stem">Stem</option>
+                    <option value="leaf">Leaf</option>
+                    <option value="flower">Flower</option>
+                    <option value="fruit">Fruit</option>
+                </select>
+                <select id="region-filter">
+                    <option value="">Select Region</option>
+                    <option value="india">India</option>
+                    <option value="asia">Asia</option>
+                    <option value="africa">Africa</option>
+                    <option value="america">America</option>
+                </select>
+                <input type="text" id="medicinal-use" placeholder="Medicinal Use">
+                <button type="button" id="filter-button" class="filter-button">Search</button>
+            </form>
+
+            <div class="filter-loading">
+                <div class="loading-spinner"></div>
+            </div>
+
+            <div class="filter-results"></div>
+        </div>
+    </main>
+    <center>
+    <footer>
+        <div class="container">
+            <div class="footer-content" div id="about">
+                <div class="footer-section">
+                    <h3>AYUSH Virtual Herbal Garden</h3>
+                    <p>Explore the healing power of traditional medicine.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#virtual-tour">Virtual Tour</a></li>
+                        <li><a href="#advanced-search">Advanced Search</a></li>
+                        <li><a href="/static/about.html">About Our Team</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>Email: sihwinners@gmail.com</p>
+                    <p>Phone: Still in progress</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 AYUSH Virtual Herbal Garden. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</center>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script>
+               // Ensure this script is placed at the end of the body or wrapped in a DOMContentLoaded event listener
+
+// CSRF token setup for AJAX requests
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+$(document).ready(function() {
+    let plantName = "";
+    let data = {};
+
+    
+
+    function displayPlantInfo(searchData) {
+        plantName = searchData.name || $('#plant_name').val();
+        const loadingElement = document.querySelector('.loading');
+        const plantDetails = document.getElementById('plant-details');
+        const modelEmbed = document.getElementById('model-embed');
+        
+        gsap.to(loadingElement, {opacity: 0, duration: 0.3, onComplete: () => {
+            loadingElement.style.display = 'none';
+        }});
+    
+        plantDetails.innerHTML = searchData.plant_info;
+        gsap.fromTo(plantDetails, {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 0.6, ease: "power3.out"});
+        plantDetails.classList.add('show');
+    
+        if (searchData.model_url) {
+            modelEmbed.innerHTML = `<iframe src="${searchData.model_url}" frameborder="0"></iframe>`;
+        } else if (searchData.image_url) {
+            modelEmbed.innerHTML = `<img src="${searchData.image_url}" alt="Plant Image">`;
+        }
+        gsap.fromTo(modelEmbed, {opacity: 0, scale: 0.95}, {opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)", delay: 0.3});
+        modelEmbed.classList.add('show');
+    
+        document.getElementById('bookmark-button').style.display = 'block';
+        $('#share-buttons-container').show();
+        $('#bookmark-note-area').show();
+
+        if (searchData.notes) {
+            const existingNote = document.createElement('div');
+            existingNote.innerHTML = `<p><strong>Notes:</strong> ${searchData.notes}</p>`;
+            plantDetails.appendChild(existingNote);
+        }
+    }
+
+    $('#search-button').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log('Search button clicked');
+        plantName = $('#plant_name').val();
+        console.log('Plant name:', plantName);
+        
+        const loadingElement = document.querySelector('.loading');
+        const plantDetails = document.getElementById('plant-details');
+        const modelEmbed = document.getElementById('model-embed');
+        
+        if (!plantName) {
+            gsap.to(document.querySelector('.search-container'), {
+                x: [-10, 10, -10, 10, 0],
+                duration: 0.4,
+                ease: "power2.inOut"
+            });
+            return;
+        }
+    
+        loadingElement.style.display = 'flex';
+        plantDetails.classList.remove('show');
+        modelEmbed.classList.remove('show');
+        plantDetails.innerHTML = '';
+        modelEmbed.innerHTML = '';
+        
+        gsap.to(loadingElement, {opacity: 1, duration: 0.3});
+        
+        $.ajax({
+            url: '/search',
+            method: 'POST',
+            data: { plant_name: plantName },
+            dataType: 'json',
+            success: function(searchData) {
+                console.log('Received data:', searchData);
+                data = searchData;
+                displayPlantInfo(searchData);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                gsap.to(loadingElement, {opacity: 0, duration: 0.3, onComplete: () => {
+                    loadingElement.style.display = 'none';
+                }});
+                plantDetails.innerHTML = '<p>An error occurred while fetching herb information. Please try again.</p>';
+                gsap.fromTo(plantDetails, {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 0.6, ease: "power3.out"});
+                plantDetails.classList.add('show');
+            }
+        });
+    });
+
+   // Bookmark functionality
+$('#bookmark-button').on('click', function() {
+    if (plantName && data) {
+        let bookmarkButton = $(this);
+        let loadingBar = $('<div class="bookmark-loading">').insertAfter(bookmarkButton);
+        loadingBar.addClass("active");
+
+        // Prepare the data to be sent
+        let bookmarkData = {
+            name: plantName,
+            info: data.plant_info,
+            model_url: data.model_url,
+            image_url: data.image_url,
+            notes: $('#bookmark-note-input').val() // Include any notes
+        };
+
+        $.ajax({
+            url: '/bookmark',
+            method: 'POST',
+            data: JSON.stringify(bookmarkData),
+            contentType: 'application/json',
+            success: function(response) {
+                loadingBar.removeClass('active');
+                loadingBar.remove();
+                if (response.success) {
+                    console.log('Bookmark successfully saved');
+                    alert('Bookmark saved successfully!');
+                    getBookmarks();
+                } else {
+                    console.error('Server responded with an error:', response.message);
+                    alert('Failed to save bookmark: ' + response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                loadingBar.removeClass('active');
+                loadingBar.remove();
+                alert('An error occurred while saving the bookmark. Please try again later.');
+            }
+        });
+    } else {
+        alert('No plant data available to bookmark.');
+    }
+});
+
+    // Get bookmarks
+    function getBookmarks() {
+        $.ajax({
+            url: '/bookmarks',
+            type: 'GET',
+            success: function(bookmarks) {
+                const bookmarksContainer = $('#bookmarks-container ul');
+                bookmarksContainer.empty();
+
+                if (bookmarks.length === 0) {
+                    bookmarksContainer.html('<li>No bookmarks yet</li>');
+                } else {
+                    bookmarks.forEach(bookmark => {
+                        let li = $('<li>');
+                        li.html(`
+                            <h3>${bookmark.name}</h3>
+                            <p>${bookmark.info ? bookmark.info.substring(0, 100) : ''}...</p>
+                            ${bookmark.model_url ? `<a href="${bookmark.model_url}" target="_blank">View Model</a>` : ''}
+                            ${bookmark.image_url ? `<img src="${bookmark.image_url}" alt="${bookmark.name}" style="max-width: 200px;">` : ''}
+                            <p><strong>Notes:</strong> ${bookmark.notes || 'No notes added yet'}</p>
+                        `);
+                        let removeButton = $('<button>')
+                            .addClass('remove-bookmark')
+                            .attr('data-plant', bookmark.name)
+                            .text('Remove')
+                            .css({
+                                'background-color': '#ff4444',
+                                'color': 'white',
+                                'border': 'none',
+                                'padding': '5px 10px',
+                                'border-radius': '3px',
+                                'cursor': 'pointer',
+                                'margin-top': '10px'
+                            });
+                        li.append(removeButton);
+                        bookmarksContainer.append(li);
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching bookmarks:', error);
+                if (xhr.status === 401) {
+                    alert('Please log in to view bookmarks.');
+                } else {
+                    alert('An error occurred while fetching bookmarks. Please try again later.');
+                }
+            }
+        });
+    }
+
+    // Remove bookmark
+    $(document).on('click', '.remove-bookmark', function() {
+        const plantName = $(this).data('plant');
+        removeBookmark(plantName);
+    });
+
+    function removeBookmark(plantName) {
+        const $removeButton = $(`button[data-plant="${plantName}"]`);
+        const $loadingBar = $('<div>').addClass('remove-bookmark-loading');
+    
+        $removeButton.after($loadingBar);
+        $loadingBar.addClass('active');
+        $removeButton.prop('disabled', true);
+    
+        $.ajax({
+            url: '/remove_bookmark',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ name: plantName }),
+            success: function(response) {
+                $loadingBar.removeClass('active');
+                $loadingBar.remove();
+                $removeButton.prop('disabled', false);
+                if (response.success) {
+                    getBookmarks();
+                } else {
+                    alert('Failed to remove bookmark. Please try again.');
+                }
+            },
+            error: function(xhr, status, error) {
+                $loadingBar.removeClass('active');
+                $loadingBar.remove();
+                $removeButton.prop('disabled', false);
+                console.error('Error removing bookmark:', error);
+                alert('An error occurred while removing the bookmark. Please try again later.');
+            }
+        });
+    }
+
+    // Update bookmark notes
+    $('#save-bookmark-note').click(function() {
+        const noteText = $('#bookmark-note-input').val();
+    
+        if (!plantName) {
+            alert('Please search and find the herb to update its notes.');
+            return;
+        }
+    
+        $.ajax({
+            url: '/update_bookmark_notes',
+            type: 'POST',
+            data: { plant_name: plantName, notes: noteText },
+            success: function() {
+                alert('Bookmark notes saved.');
+                $('#bookmark-note-area').hide();
+            },
+            error: function(xhr, status, error) {
+                alert('Failed to save notes. Please try again.');
+            }
+        });
+    });
+
+    // Advanced Search functionality
+    $('.filter-button').on('click', function() {
+        const system = $('#ayush-system').val();
+        const part = $('#plant-part').val();
+        const use = $('#medicinal-use').val();
+        const region = $('#region-filter').val();
+        const loadingElement = $('.filter-loading');
+        const filterResults = $('.filter-results');
+    
+        loadingElement.addClass('active');
+        filterResults.html('');
+    
+        $.ajax({
+            url: '/filter_plants',
+            method: 'POST',
+            data: JSON.stringify({ system, part, use, region }),
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+                loadingElement.removeClass('active');
+            
+                if (Array.isArray(data) && data.length > 0) {
+                    data.forEach(plant => {
+                        const plantCard = $('<div>').addClass('plant-card');
+                        plantCard.html(`
+                            <img src="${plant.image_url}" alt="${plant.name} Image">
+                            <h3>${plant.name}</h3>
+                            <p>${plant.description || ''}</p>
+                            <p><strong>Matches criteria:</strong> ${plant.matches_criteria || ''}</p>
+                        `);
+                        filterResults.append(plantCard);
+                    });
+                } else if (typeof data === 'object' && data.error) {
+                    filterResults.html(`<p>Error: ${data.error}</p>`);
+                } else {
+                    filterResults.html('<p>No results found.</p>');
+                }
+            },
+            error: function(xhr, status, error) {
+                loadingElement.removeClass('active');
+                console.error('Error:', error);
+                filterResults.html('<p>An error occurred while fetching results. Please try again.</p>');
+            }
+        });
+    });
+
+
+    //for plant quiz and plant of the day 
+    $('#load-plant-of-the-day').on('click', function() {
+        const loadingElement = $('<div class="loading"><div class="loading-spinner"></div></div>');
+        const potdLoadingBar = $('<div>').addClass('potd-loading'); // Create loading bar for POTD
+        $('#plant-of-the-day-content').html(loadingElement);
+        $('#plant-of-the-day-content').append(potdLoadingBar); // Add loading bar to container
+    
+        potdLoadingBar.addClass("active");  // Display loading bar 
+    
+        $.ajax({
+            url: '/plant_of_the_day',
+            method: 'GET',
+            success: function(data) {
+                potdLoadingBar.removeClass("active");  // Hide loading bar
+                potdLoadingBar.remove(); // Remove loading bar
+                let content = `
+                    <h3>${data['Plant Name']}</h3>
+                    <img src="${data['image_url']}" alt="${data['Plant Name']}" style="max-width: 300px;">
+                    <p><strong>Scientific Name:</strong> ${data['Scientific Name']}</p>
+                    <p><strong>AYUSH System:</strong> ${data['AYUSH System']}</p>
+                    <p><strong>Description:</strong> ${data['Brief Description']}</p>
+                    <p><strong>Main Medicinal Uses:</strong> ${data['Main Medicinal Uses']}</p>
+                    <p><strong>Interesting Fact:</strong> ${data['Interesting Fact']}</p>
+                `;
+                $('#plant-of-the-day-content').html(content);
+                gsap.from('#plant-of-the-day-content > *', {opacity: 0, y: 20, stagger: 0.1, duration: 0.5});
+            },
+            error: function() {
+                potdLoadingBar.removeClass("active");  // Hide loading bar
+                potdLoadingBar.remove(); // Remove loading bar
+                // Display a custom alert instead of the default alert
+                displayCustomAlert("Failed to load Plant of the Day. Please try again.", "error"); 
+            }
+        });
+    });
+    
+    
+    $('#load-plant-quiz').on('click', function() {
+        const loadingElement = $('<div class="loading"><div class="loading-spinner"></div></div>');
+        const quizLoadingBar = $('<div>').addClass('quiz-loading'); // Create loading bar for quiz
+        $('#plant-quiz-content').html(loadingElement);
+        $('#plant-quiz-content').append(quizLoadingBar); // Add loading bar to container
+        quizLoadingBar.addClass("active");  // Display loading bar
+    
+        $.ajax({
+            url: '/plant_quiz',
+            method: 'GET',
+            success: function(data) {
+                quizLoadingBar.removeClass("active");  // Hide loading bar
+                quizLoadingBar.remove(); // Remove loading bar
+                // ... (rest of the quiz code) ...
+            },
+            error: function() {
+                quizLoadingBar.removeClass("active");  // Hide loading bar
+                quizLoadingBar.remove(); // Remove loading bar
+                displayCustomAlert("Failed to load Quiz Question. Please try again.", "error"); // Use custom alert
+            }
+        });
+    });
+
+    // Custom Alert Function (Optional)
+function displayCustomAlert(message, type) {
+    const alertContainer = document.createElement('div');
+    alertContainer.classList.add('custom-alert', `custom-alert-${type}`);
+    alertContainer.textContent = message;
+
+    // Customize appearance of the custom alert (styles are defined below in the CSS section)
+    document.body.appendChild(alertContainer);
+
+    setTimeout(() => {
+        alertContainer.remove();
+    }, 3000); 
+}
+
+    // Add GSAP animations for the new sections
+    gsap.from('#plant-of-the-day, #plant-quiz', {
+        opacity: 0,
+        y: 50,
+        stagger: 0.2,
+        duration: 0.8,
+        scrollTrigger: {
+            trigger: '#plant-of-the-day',
+            start: 'top 80%'
+        }
+    });
+
+    //end of the code
+
+    // Voice Search functionality
+    if ('webkitSpeechRecognition' in window) {
+        const recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+    
+        $('#voiceSearchBtn').on('click', function() {
+            recognition.start();
+            $(this).html('<i class="fas fa-microphone-slash"></i> Listening...');
+            $('#plant_name').attr('placeholder', 'Listening...');
+        });
+    
+        recognition.onresult = function(event) {
+            const transcript = Array.from(event.results)
+                .map(result => result[0].transcript)
+                .join('');
+            
+            $('#plant_name').val(transcript);
+            $('#plant_name').attr('placeholder', 'Enter herb name');
+            
+            if (event.results[0].isFinal) {
+                $('#voiceSearchBtn').html('<i class="fas fa-microphone"></i> Voice Search');
+                $('#search-button').click();
+            }
+        };
+    
+        recognition.onerror = function(event) {
+            console.error('Speech recognition error', event.error);
+            $('#voiceSearchBtn').html('<i class="fas fa-microphone"></i> Voice Search');
+            $('#plant_name').attr('placeholder', 'Enter herb name');
+        };
+    
+        recognition.onend = function() {
+            $('#voiceSearchBtn').html('<i class="fas fa-microphone"></i> Voice Search');
+            $('#plant_name').attr('placeholder', 'Enter herb name');
+        };
+    } else {
+        $('#voiceSearchBtn').hide();
+        console.log('Web Speech API is not supported in this browser.');
+    }
+
+    // Initial calls
+    getBookmarks();
+
+    // GSAP Animations
+    gsap.from('.feature-card', {
+        opacity: 0,
+        y: 50,
+        stagger: 0.2,
+        duration: 0.8,
+        scrollTrigger: {
+            trigger: '.features',
+            start: 'top 80%'
+        }
+    });
+
+    gsap.fromTo(".plant-1", {y: 10}, {y: -10, yoyo: true, repeat: -1, duration: 2, ease: "sine.inOut"});
+    gsap.fromTo(".plant-2", {x: 10}, {x: -10, yoyo: true, repeat: -1, duration: 3, ease: "sine.inOut"});
+    gsap.fromTo(".plant-3", {rotation: 3}, {rotation: -3, yoyo: true, repeat: -1, duration: 2.5, ease: "power1.inOut"});
+
+    // Advanced Search Animation
+    const advancedSearchForm = document.querySelector('.filter-form');
+    
+    gsap.fromTo(advancedSearchForm, {opacity: 0, y: 20}, {
+        opacity: 1, 
+        y: 0, 
+        duration: 0.6, 
+        ease: "power3.out", 
+        scrollTrigger: {
+            trigger: '#advanced-search', 
+            start: 'top 80%' 
+        }
+    });
+});
+
+
+function fetchQuiz() {
+    fetch('/plant_quiz')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Quiz data:", data);
+            if (!data.question || !data.options || !data.correct_answer || !data.explanation) {
+                throw new Error('Quiz data is incomplete');
+            }
+            
+            // Update question
+            document.getElementById('quiz-question').textContent = data.question;
+
+            // Update options
+            const quizForm = document.getElementById('quiz-form');
+            quizForm.dataset.correctAnswer = data.correct_answer;
+            quizForm.dataset.explanation = data.explanation;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = ''; // Clear existing options
+
+            Object.entries(data.options).forEach(([key, value]) => {
+                const optionHTML = `
+                    <div class="quiz-option">
+                        <input type="radio" id="option-${key}" name="quiz-answer" value="${key}">
+                        <label for="option-${key}">${value}</label>
+                    </div>
+                `;
+                optionsContainer.innerHTML += optionHTML;
+            });
+
+            // Reset the quiz result and enable submit button
+            const resultElement = document.getElementById('quiz-result');
+            resultElement.textContent = '';
+            resultElement.style.display = 'none';
+            document.querySelector('#quiz-form button[type="submit"]').disabled = false;
+        })
+        .catch(error => {
+            console.error('Error fetching quiz:', error);
+            document.getElementById('quiz-question').textContent = 'Failed to load quiz. Please try again.';
+        });
+}
+// Call this function when the page loads
+document.addEventListener('DOMContentLoaded', fetchQuiz);
+
+document.getElementById('quiz-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const selectedAnswer = document.querySelector('input[name="quiz-answer"]:checked');
+    const correctAnswer = this.dataset.correctAnswer;
+    const explanation = this.dataset.explanation;
+
+    if (selectedAnswer) {
+        let resultMessage = '';
+        if (selectedAnswer.value === correctAnswer) {
+            resultMessage = 'Correct! ';
+        } else {
+            resultMessage = `Incorrect. The correct answer is ${correctAnswer}. `;
+        }
+        
+        // Add explanation to the result message
+        resultMessage += `\n\nExplanation: ${explanation}`;
+        
+        // Display result and explanation
+        const resultElement = document.getElementById('quiz-result');
+        resultElement.textContent = resultMessage;
+        resultElement.style.display = 'block';
+        
+        // Disable form submission after answering
+        document.querySelector('#quiz-form button[type="submit"]').disabled = true;
+    } else {
+        alert('Please select an answer.');
+    }
+});
+
+const menuButton = document.querySelector('.menu-button');
+const menuIcon = menuButton.querySelector('i');
+const navLinks = document.querySelector('.nav-links');
+
+function toggleMenu() {
+    navLinks.classList.toggle('show');
+    const isExpanded = navLinks.classList.contains('show');
+    menuButton.setAttribute('aria-expanded', isExpanded);
+    menuIcon.className = isExpanded ? 'fas fa-times' : 'fas fa-bars';
+}
+
+menuButton.addEventListener('click', toggleMenu);
+
+// Close menu when clicking outside
+document.addEventListener('click', (event) => {
+    if (!navLinks.contains(event.target) && !menuButton.contains(event.target) && navLinks.classList.contains('show')) {
+        toggleMenu();
+    }
+});
+
+// Close menu when a link is clicked
+navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (navLinks.classList.contains('show')) {
+            toggleMenu();
+        }
+    });
+});
+
+
+//story feature 
+
+$('#generate-story-button').on('click', function() {
+    const storyLoadingBar = $('.story-loading'); 
+    storyLoadingBar.addClass("active");  
+    $('#story-text').text('Generating...'); // Show a loading message
+
+ const prompt = "Write a captivating short story about the medicinal benefits of plants used in AYUSH systems. The story should highlight the importance of these plants in promoting health and well-being. Include a title for the story and format the story in a visually appealing way with text formatting and headings.";
+    $.ajax({
+        url: '/generate_story', 
+        type: 'POST',
+        data: JSON.stringify({ prompt: prompt }),
+        contentType: 'application/json',
+        success: function(response) {
+            storyLoadingBar.removeClass('active'); 
+            // Parse and format the story
+            const storyData = response.story;
+            const titleMatch = storyData.match(/^(.*?)\n/);
+            const storyBody = storyData.substring(titleMatch[0].length); // Remove title from the body 
+
+            $('#story-heading').text(titleMatch[1]); // Set story title 
+            $('#story-text').html(formatStory(storyBody)); // Update the story content
+        },
+        error: function(xhr, status, error) {
+            storyLoadingBar.removeClass('active'); 
+            $('#story-text').text('Failed to generate story. Please try again later.');
+            console.error("Error generating story:", error);
+        }
+    });
+});
+
+// Function to format story
+function formatStory(storyText) {
+    const lines = storyText.split('\n'); 
+    let formattedStory = '';
+    let titleFound = false; 
+
+    lines.forEach((line) => {
+        if (!titleFound && line.startsWith('### ')) { // Notice the extra space after ###
+            // Extract title (remove extra spaces)
+            const titleText = line.substring(4).trim(); // Start at index 4 to remove "### " 
+            formattedStory += `
+                <h2 style="text-decoration: underline;">${titleText}</h2> 
+            `; 
+            titleFound = true;
+        } else {
+            // Remove unnecessary characters from regular lines
+            formattedStory += `<p class="story-paragraph">${line.replace(/([a-zA-Z]+) plant/g, '<span class="highlight-plant">$1 plant</span>').replace(/[*#]/g, '')}</p>`; 
+        }
+    });
+
+    return formattedStory;
+}
+
+    </script>
+</body>
+
+</html>
